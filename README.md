@@ -1,8 +1,8 @@
 # adofaiOnPython
 
 - [adofaiOnPython](#adofaiOnPython)
-  - [基本信息  Basic Info](# 基本信息 basic info)
-  - [计划表 planned feature list](# 计划表 planned feature list)
+  - [基本信息 BasicInfo](#基本信息-BasicInfo)
+  - [计划表 PlannedFeatureList](#计划表-PlannedFeaturesList)
 
 **Warning: The Following Translations are Almost All Done by Machines, so I won't be Responsible for Them. (Well, my English is so poor that I may not able to write on my owe......except this sentence.)**
 
@@ -11,7 +11,7 @@ Essentially, the `.adofai` file is a `.json`, which makes reading and modifying 
 
 
 
-## 基本信息  Basic Info
+## 基本信息-BasicInfo
 
 对于音游《冰与火之舞》谱文件的读取、编辑以及对音乐的采集与自动写谱。
 For the rhythm game "A Dance of Ice and Fire", it involves reading, editing score files, and collecting music for automatic scorewriting.
@@ -25,7 +25,9 @@ Of course, I think using this project to edit visual effects is purely an act of
 如果你希望我添加额外的功能，你可以发起一个Issue，但我并不一定会注意到它。
 If you wish for me to add additional features, you can open an Issue, but I may not necessarily notice it.
 
-## 计划表 planned feature list
+
+
+## 计划表-PlannedFeaturesList
 
 + [x] 读取和存储`.adofai`文件。    Read and store `.adofai` files.
 + [x] 旧版本`.adofai`文件向新版本的转化。    Conversion of old version `.adofai` files to the new version.
