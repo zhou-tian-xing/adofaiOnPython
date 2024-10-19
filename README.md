@@ -1,8 +1,8 @@
 # adofaiOnPython
 
 - [adofaiOnPython](#adofaiOnPython)
-  - [基本信息  Basic Info](## 基本信息  Basic Info)
-  - [计划表 planned feature list](## 计划表 planned feature list)
+  - [基本信息  Basic Info](# 基本信息 basic info)
+  - [计划表 planned feature list](# 计划表 planned feature list)
 
 **Warning: The Following Translations are Almost All Done by Machines, so I won't be Responsible for Them. (Well, my English is so poor that I may not able to write on my owe......except this sentence.)**
 
