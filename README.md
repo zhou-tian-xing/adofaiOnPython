@@ -1,6 +1,8 @@
 # adofaiOnPython
 
-[toc]
+- [adofaiOnPython](#adofaiOnPython)
+  - [基本信息  Basic Info](## 基本信息  Basic Info)
+  - [计划表 planned feature list](## 计划表 planned feature list)
 
 **Warning: The Following Translations are Almost All Done by Machines, so I won't be Responsible for Them. (Well, my English is so poor that I may not able to write on my owe......except this sentence.)**
 
@@ -23,7 +25,7 @@ Of course, I think using this project to edit visual effects is purely an act of
 如果你希望我添加额外的功能，你可以发起一个Issue，但我并不一定会注意到它。
 If you wish for me to add additional features, you can open an Issue, but I may not necessarily notice it.
 
-#### 计划表 planned feature list
+## 计划表 planned feature list
 
 + [x] 读取和存储`.adofai`文件。    Read and store `.adofai` files.
 + [x] 旧版本`.adofai`文件向新版本的转化。    Conversion of old version `.adofai` files to the new version.
