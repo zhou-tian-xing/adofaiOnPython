@@ -31,8 +31,8 @@ If you wish for me to add additional features, you can open an Issue, but I may 
 
 + [x] 读取和存储`.adofai`文件。    Read and store `.adofai` files.
 + [x] 旧版本`.adofai`文件向新版本的转化。    Conversion of old version `.adofai` files to the new version.
-+ [ ] 两次打击之间经过的角度与`.adofai`角数据的互相转化。    Conversion between the angles passed between two hits and the .adofai angle data.
-+ [ ] 两次打击之间经过的时间和角度的互相转化。    Conversion between the time and angles passed between two hits.
++ [x] 两次打击之间经过的角度与`.adofai`角数据的互相转化。    Conversion between the angles passed between two hits and the .adofai angle data.
++ [x] 两次打击之间经过的时间和角度的互相转化。    Conversion between the time and angles passed between two hits.
 + [ ] 一定频率范围内对`.wav`文件的踩音。    Beat matching of `.wav` files within a certain frequency range.
 + [ ] 对于手动录制的内容进行踩音。    Beat matching for manually recorded content.
 + [ ] 谱面的模块化，即可以通过添加模版的方式批量制造同一种东西。（这点可能需要把旋转和倍速也记录下来）    Modularization of the chart, which means that the same thing can be mass-produced by adding templates. (This may require recording rotations and speed multipliers as well.)
