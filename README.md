@@ -4,7 +4,7 @@
   - [基本信息 Basic Info](#基本信息-BasicInfo)
   - [计划表 Planned Feature List](#计划表-PlannedFeaturesList)
   - [使用指南 Usage Guide](#使用指南-UsageGuide)
-    - [`adofai.py`](#`adofai.py`)
+    - [`adofai.py`](#adofai.py)
 
 **Warning: The Following Translations are Almost All Done by Machines, so I won't be Responsible for Them. (Well, my English is so poor that I may not able to write on my owe......except this sentence.)**
 
@@ -51,7 +51,7 @@ If you wish for me to add additional features, you can open an Issue, but I may 
 未来计划整个项目将封装到两个文件，分别是操作`.adofai`文件的`adofai.py`和进行自动采音的`collect.py`（暂定），以下分这两个部分进行描述。
 The future plan is to encapsulate the entire project into two files, namely 'adofai.py' for manipulating the '.adofai' file and 'collect.py' for automatic sound harvesting (tentative). The following will describe these two parts.
 
-#### `adofai.py`
+### adofai.py
 
 ```python
 Modules: json
