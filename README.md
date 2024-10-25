@@ -5,6 +5,9 @@
   - [计划表 Planned Feature List](#计划表-PlannedFeaturesList)
   - [使用指南 Usage Guide](#使用指南-UsageGuide)
     - [`adofai.py`](#adofaipy)
+  - [例子 Examples](#例子Examples)
+    - [1](#1)
+    - [2](#2)
 
 **Warning: The Following Translations are Almost All Done by Machines, so I won't be Responsible for Them. (Well, my English is so poor that I may not able to write on my owe......except this sentence.)**
 
@@ -129,4 +132,37 @@ class ADOFAI:
 
 def _docking(x, dock):
     """docking helper"""
+```
+
+
+
+## 例子Examples
+
+### 1
+
+以下代码创建并保存了一个长两秒钟、KPS=440的`test.adofai`文件。其中每一次两次打击之间角度小于45°时都为块附加了类型为"Twirl"的Action。
+The following code creates and saves a two second, KPS=440 `. adofai` file. When the angle between each two strikes is less than 45 degrees, an Action of type "Twirl" is attached to the block.
+
+```python
+a = ADOFAI(None)
+a.angleToAngleData(a.timeToAngle([1 / 440] * 880, 600), 0, False, lambda n, x: x < 45)
+a.save("test.adofai")
+```
+
+
+
+### 2
+
+以下代码读取`test.adofai`并移除了其中floor在1和10之间（不包含1和10）的旋转，但保持效果不变。最终将修改后的结果覆盖原先文件。
+The following code reads `test.adofai` and removes the rotation of the floor between 1 and 10 (excluding 1 and 10), but keeps the effect unchanged. The final modified result will overwrite the original file.
+
+```python
+a = ADOFAI("test.adofai")
+floorss = [x["floor"] for x in a.actions if x["eventType"] == "Twirl"]
+def f(n, x):
+    if n in floors and not 1 < n < 10:
+        return True
+    return False
+a.angleToAngleData(a.passedAngle(), 0, False, f)
+a.save("test.adofai")
 ```
