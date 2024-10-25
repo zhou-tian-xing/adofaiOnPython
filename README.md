@@ -166,3 +166,6 @@ def f(n, x):
 a.angleToAngleData(a.passedAngle(), 0, False, f)
 a.save("test.adofai")
 ```
+
+总之，只需要灵活的应用passedAngle, passedTime, timeToAngle, angleToAngleData四个方法就可以实现对旋转和加速Action的操作。
+In short, it is only necessary to flexibly apply the four methods of PassedAngle, PassedTime, timeToAngle, and angleToAngleData to achieve the operation of rotating and accelerating actions.
