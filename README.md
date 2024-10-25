@@ -9,7 +9,7 @@
     - [1](#1)
     - [2](#2)
 
-**Warning: The Following Translations are Almost All Done by Machines, so I won't be Responsible for Them. (Well, my English is so poor that I may not able to write on my owe......except this sentence.)**
+**Warning: The Following Translations are Almost All Done by Machines, so I won't be Responsible for Them. (Well, my English is so poor that I may not able to write on my own......except this sentence.)**
 
 本质上，`.adofai`文件就是一个`.json`，这使得读取和改变它变得很容易。
 Essentially, the `.adofai` file is a `.json`, which makes reading and modifying it quite easy.
