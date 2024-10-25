@@ -4,7 +4,7 @@
   - [基本信息 Basic Info](#基本信息-BasicInfo)
   - [计划表 Planned Feature List](#计划表-PlannedFeaturesList)
   - [使用指南 Usage Guide](#使用指南-UsageGuide)
-    - [`adofai.py`](#adofai.py)
+    - [`adofai.py`](#adofaipy)
 
 **Warning: The Following Translations are Almost All Done by Machines, so I won't be Responsible for Them. (Well, my English is so poor that I may not able to write on my owe......except this sentence.)**
 
