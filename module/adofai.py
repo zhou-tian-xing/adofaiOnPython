@@ -16,14 +16,14 @@ def _docking(x, dock):  # 最近元素
     return closest_num + n * 90
 
 
-class ADOFAI:
+class ADOFAI:  # 为了方便操作文件搞了一个类
     def __init__(self, path):
         """
         Create an adofai object
         :param path: The path of .adofai file you want to load. If path == None, it'll create an empty object.
         """
+        self._path = path
         if path is not None:
-            self._path = path
             with open(path, 'r', encoding="utf-8-sig") as f:
                 A = json.load(f)
             if "pathData" in A:
@@ -42,7 +42,7 @@ class ADOFAI:
 
         # 方便后续操作
         self.floorAct = {}
-        for i in range(len(self.angleData)):
+        for i in range(len(self.angleData) + 1):
             self.floorAct[i] = []
         for x in self.actions:
             self.floorAct[x["floor"]].append(x)
@@ -76,7 +76,7 @@ class ADOFAI:
         :return: list
         """
         total = len(self.angleData)  # 要打的块的数量=描述的方向的数量
-        out = [180]  # 第一个永远是180
+        out = []
         i = 1
         D = True  # 方向，是逆时针还是顺时针
         while i < total:
@@ -101,12 +101,14 @@ class ADOFAI:
         """
         # pitch = self.settings["pitch"] / 100  # 音高（化为0到1之间）
         # spd = 0.333333333333333333 / self.settings["bpm"]  # second per degree(angle), 没算上音高
-        K = self.settings["pitch"] / self.settings["bpm"] * 0.00333333333333333333  # 上面两式的整合
+        pitch = self.settings["pitch"] if "pitch" in self.settings else 100
+        K = pitch / self.settings["bpm"] * 0.00333333333333333333  # 上面两式的整合
         total = len(self.angleData)  # 要打的块的数量=描述的方向的数量
-        out = [180 * K]  # 第一个永远是180
+        out = []
         i = 1
         D = True  # 方向，是逆时针还是顺时针
         while i < total:
+            # 由于指示的是方向，所以大于360和小于0的角都毫无意义。
             if self.angleData[i] != 999:
                 a = self.angleData[i - 1] - self.angleData[i] + 180
             else:
@@ -127,37 +129,81 @@ class ADOFAI:
             i += 1
         return out
 
-    def timeToAngle(self, passingTime: list, bpm, offset, docking):
+    def timeToAngle(self, passingTime: list, bpm, speedFilter=lambda n, x: 1):
         """
-        turn time to angleData and store in self.angleData (without actions)
+        turn time to passed angle and give action of "SetSpeed"
         :param passingTime: the list describing time passed of every beat
-        :param docking: docking of a note (0 - 90 degree, including 90), input None if you want default ([0, 18, 30, 45, 60, 72]), input False to not dock
-        :param offset: It means that all angles have increased offset degree
         :param bpm: The bpm of the song
-        :return: None
+        :param speedFilter: A method(f(n, x)) deciding which blocks will be given action of "SetSpeed", n is the floor of the block, and x is the angle(may be docked).
+                            If the return is 1, the block will not be given action of "SetSpeed", other will use "bpmMultiplier" = result. (x is the passed angle that takes into account changes in speed)
+        :return: [passed angle]
         """
         k = bpm * 3
-        angle = [k * t for t in passingTime]
+        angle = []
+        spd = 1
         self.settings["bpm"] = bpm
-        self.angleToAngleData(angle, offset, docking)
+        self.removeAction(None, "SetSpeed")
+        n = 0
+        for t in passingTime:
+            if t:
+                speed_change = speedFilter(n, k * t * spd)
+                if speed_change != 1:
+                    spd *= speed_change
+                    self.actions.append(
+                        {"floor": n + 1, "eventType": "SetSpeed", "speedType": "Multiplier", "beatsPerMinute": 100,
+                         "bpmMultiplier": speed_change, "angleOffset": 0})
+                angle.append(k * t * spd)
+                n += 1
+        return angle
 
-    def angleToAngleData(self, passedAngle, offset, docking):
+    def angleToAngleData(self, passedAngle, offset, docking, twirlFilter=lambda n, x: False):
         """
-        Turn the angle rotated to angleData and store in self.angleData (without effect)
+        Turn the angle passed to angleData and store in self.angleData with the giving of action "Twirl"
         :param docking: docking of a note (0 - 90 degree, including 90), input None if you want default ([0, 18, 30, 45, 60, 72]), input False to not dock
         :param offset: It means that all angles have increased offset degree
         :param passedAngle: list, the angle rotated
+        :param twirlFilter: A method(f(n, x)) deciding which blocks will be given action of "Twirl", n is the floor of the block, and x is the angle (may be docked)
         :return: None
         """
-        dock = [0, 15, 30, 45, 60, 75] if docking is None else docking
-        if docking:
-            passedAngle = [_docking(x % 360, dock) for x in passedAngle]
-        self.angleData = [180]
+        passedAngle = [180] + passedAngle  # 开头还有一个180度
+        dock = [0, 15, 30, 45, 60, 75, 90] if docking is None else docking
+        if dock:
+            passedAngle = [_docking(x, dock) for x in passedAngle]
+        self.angleData = []
+        self.removeAction(None, "Twirl")
         angle = 0
+        Twirl = 1
+        n = 0
         for x in passedAngle:
             if x:
-                angle = angle - x + 180 + offset
+                if twirlFilter(n, x):
+                    Twirl = -Twirl
+                    self.actions.append({'floor': n, 'eventType': 'Twirl'})
+                angle = angle - x * Twirl + 180 + offset
                 self.angleData.append(angle % 360)
+                n += 1
+            if x > 360:
+                print("[WARN] passedAngle = {} > 360, result may be error.".format(x))
+        self.floorAct = {}
+        for i in range(len(self.angleData) + 1):
+            self.floorAct[i] = []
+        for x in self.actions:
+            self.floorAct[x["floor"]].append(x)
+
+    def removeAction(self, floor, eventType):
+        """
+        Directly delete action in self.actions
+        :param floor: A list include floors that will be detected, None for all
+        :param eventType: 'eventType' of an action
+        :return: None
+        """
+        for i in range(len(self.actions)):
+            if floor is None:
+                if self.actions[i]["eventType"] == eventType:
+                    del self.actions[i]
+            elif self.actions[i]["floor"] in floor:
+                if self.actions[i]["eventType"] == eventType:
+                    del self.actions[i]
 
     def docking(self, docking):
         """
@@ -165,7 +211,7 @@ class ADOFAI:
         :param docking: docking of a note (0 - 90 degree, including 90), input None if you want default ([0, 18, 30, 45, 60, 72])
         :return: None
         """
-        docking = [0, 15, 30, 45, 60, 75] if docking is None else docking
+        docking = [0, 15, 30, 45, 60, 75, 90] if docking is None else docking
         self.angleData = [_docking(x, docking) for x in self.angleData]
 
     def getActions(self, floor):
@@ -176,7 +222,30 @@ class ADOFAI:
         """
         return self.floorAct[floor]
 
+    def add(self, module, remove_sep=False):
+        """
+        Attach the content of another object to this object ( module.settings will be abandoned )
+        :param remove_sep: Remove the block at the middle or not
+        :param module: same as other in __add__
+        :return: None
+        """
+        if remove_sep:
+            floor0 = len(self.angleData) - 2
+            self.angleData += module.angleData[1:]
+        else:
+            floor0 = len(self.angleData) - 1
+            self.angleData += module.angleData
+        for i in range(len(module.actions)):
+            y = module.actions[i].copy()
+            y["floor"] += floor0
+            self.actions.append(y)
+        self.decorations = self.decorations + module.decorations
+
     def save(self, path):
+        """
+        Saving all content as a .adofai file
+        :return: None
+        """
         with open(path, 'w') as f:
             json.dump({"angleData": self.angleData, "settings": self.settings, "actions": self.actions,
                        "decorations": self.decorations}, f)
