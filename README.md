@@ -1,8 +1,9 @@
 # adofaiOnPython
 
 - [adofaiOnPython](#adofaiOnPython)
-  - [基本信息 BasicInfo](#基本信息-BasicInfo)
-  - [计划表 PlannedFeatureList](#计划表-PlannedFeaturesList)
+  - [基本信息 Basic Info](##基本信息-BasicInfo)
+  - [计划表 Planned Feature List](##计划表-PlannedFeaturesList)
+  - [使用指南 Usage Guide](##使用指南-UsageGuide)
 
 **Warning: The Following Translations are Almost All Done by Machines, so I won't be Responsible for Them. (Well, my English is so poor that I may not able to write on my owe......except this sentence.)**
 
@@ -35,9 +36,13 @@ If you wish for me to add additional features, you can open an Issue, but I may 
 + [x] 两次打击之间经过的时间和角度的互相转化。    Conversion between the time and angles passed between two hits.
 + [ ] 一定频率范围内对`.wav`文件的踩音。    Beat matching of `.wav` files within a certain frequency range.
 + [ ] 对于手动录制的内容进行踩音。    Beat matching for manually recorded content.
-+ [ ] 谱面的模块化，即可以通过添加模版的方式批量制造同一种东西。（这点可能需要把旋转和倍速也记录下来）    Modularization of the chart, which means that the same thing can be mass-produced by adding templates. (This may require recording rotations and speed multipliers as well.)
-+ [ ] 在不改变实际打的谱子的情况下去除倍速。    Remove the speed multiplier without altering the actual chart.
-+ [ ] 在不改变实际打的谱子的情况下去除旋转。    Remove rotations without altering the actual chart.
++ [x] 谱面的模块化，即可以通过添加模版的方式批量制造同一种东西。（这点可能需要把旋转和倍速也记录下来）    Modularization of the chart, which means that the same thing can be mass-produced by adding templates. (This may require recording rotations and speed multipliers as well.)
++ [x] 在不改变实际打的谱子的情况下去除倍速。    Remove the speed multiplier without altering the actual chart.
++ [x] 在不改变实际打的谱子的情况下去除旋转。    Remove rotations without altering the actual chart.
 + [ ] 播放器（实际上我认为没什么必要，因为用官方的编辑器可以很方便的重新打开一个文件（只需要两次点击！））    Player (actually, I don't think it's very necessary because the official editor can easily reopen a file with just two clicks!)
 + [ ] 歌的延迟分析和bpm分析（纯属多此一举，绝对不是因为我写不明白）    Delay analysis and BPM analysis of a song (totally unnecessary, definitely not because I can't figure out how to write it)
-+ [ ] 输出每次打击的时间（或许画到一张Matplotlib图上？）    Output the time of each hit (perhaps plot it on a Matplotlib graph?)
++ [x] 输出每次打击的时间   Output the time of each hit
+
+
+
+## 使用指南-UsageGuide
