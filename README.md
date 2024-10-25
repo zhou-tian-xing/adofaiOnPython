@@ -158,7 +158,7 @@ The following code reads `test.adofai` and removes the rotation of the floor bet
 
 ```python
 a = ADOFAI("test.adofai")
-floorss = [x["floor"] for x in a.actions if x["eventType"] == "Twirl"]
+floors = [x["floor"] for x in a.actions if x["eventType"] == "Twirl"]
 def f(n, x):
     if n in floors and not 1 < n < 10:
         return True
