@@ -4,6 +4,7 @@
   - [基本信息 Basic Info](#基本信息-BasicInfo)
   - [计划表 Planned Feature List](#计划表-PlannedFeaturesList)
   - [使用指南 Usage Guide](#使用指南-UsageGuide)
+    - [`adofai.py`](#`adofai.py`)
 
 **Warning: The Following Translations are Almost All Done by Machines, so I won't be Responsible for Them. (Well, my English is so poor that I may not able to write on my owe......except this sentence.)**
 
@@ -46,3 +47,86 @@ If you wish for me to add additional features, you can open an Issue, but I may 
 
 
 ## 使用指南-UsageGuide
+
+未来计划整个项目将封装到两个文件，分别是操作`.adofai`文件的`adofai.py`和进行自动采音的`collect.py`（暂定），以下分这两个部分进行描述。
+The future plan is to encapsulate the entire project into two files, namely 'adofai.py' for manipulating the '.adofai' file and 'collect.py' for automatic sound harvesting (tentative). The following will describe these two parts.
+
+#### `adofai.py`
+
+```python
+Modules: json
+
+class ADOFAI:
+    def __init__(self, path):
+        """
+        Create an adofai object
+        :param path: The path of .adofai file you want to load. If path == None, it'll create an empty object.
+        """
+    def add(self, module, remove_sep=False):
+        """
+        Attach the content of another object to this object ( module.settings will be abandoned )
+        :param remove_sep: Remove the block at the middle or not
+        :param module: same as other in __add__
+        :return: None
+        """
+    def angleToAngleData(self, passedAngle, offset, docking, twirlFilter = lambda n, x: False):
+        """
+        Turn the angle passed to angleData and store in self.angleData with the giving of action "Twirl"
+        :param docking: docking of a note (0 - 90 degree, including 90), input None if you want default ([0, 18, 30, 45, 60, 72]), input False to not dock
+        :param offset: It means that all angles have increased offset degree
+        :param passedAngle: list, the angle rotated
+        :param twirlFilter: A method(f(n, x)) deciding which blocks will be given action of "Twirl", n is the floor of the block, and x is the angle (may be docked)
+        :return: None
+        """
+    def docking(self, docking):
+        """
+        Different from docking in self.angleToAngleData, this method will affect self.angleData independently.
+        :param docking: docking of a note (0 - 90 degree, including 90), input None if you want default ([0, 18, 30, 45, 60, 72])
+        :return: None
+        """
+    def getActions(self, floor):
+        """
+        get actions of a given block
+        :param floor: The number of block you want to view (start point = 0)
+        :return: [dict]
+        """
+    def passedAngle(self):
+        """
+        Calculate the angle rotated by each beat
+        :return: list
+        """
+    def passedTime(self):
+        """
+        Calculate the time passed by each beat (seconds)
+        :return: list
+        """
+    def pathToAngle(self):
+        """
+        Turn self.pathData to self.angleData
+        :return: None
+        """
+    def removeAction(self, floor, eventType):
+        """
+        Directly delete action in self.actions
+        :param floor: A list include floors that will be detected, None for all
+        :param eventType: 'eventType' of an action
+        :return: None
+        """
+    def save(self, path):
+        """
+        Saving all content as a .adofai file
+        :return: None
+        """
+    def timeToAngle(self, passingTime: list, bpm, speedFilter = lambda n, x: 1):
+        """
+        turn time to passed angle and give action of "SetSpeed"
+        :param passingTime: the list describing time passed of every beat
+        :param bpm: The bpm of the song
+        :param speedFilter: A method(f(n, x)) deciding which blocks will be given action of "SetSpeed", n is the floor of the block, and x is the angle(may be docked).
+                            If the return is 1, the block will not be given action of "SetSpeed", other will use "bpmMultiplier" = result. (x is the passed angle that takes into account changes in speed)
+        :return: [passed angle]
+        """
+
+def _docking(x, dock):
+    """docking helper"""
+```
