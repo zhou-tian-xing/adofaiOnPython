@@ -1,5 +1,84 @@
 import json
 
+DEFAULT = {
+    "version": 15,
+    "artist": "",
+    "specialArtistType": "None",
+    "artistPermission": "",
+    "song": "",
+    "author": "",
+    "separateCountdownTime": True,
+    "previewImage": "",
+    "previewIcon": "",
+    "previewIconColor": "003f52",
+    "previewSongStart": 0,
+    "previewSongDuration": 10,
+    "seizureWarning": False,
+    "levelDesc": "",
+    "levelTags": "",
+    "artistLinks": "",
+    "speedTrialAim": 0,
+    "difficulty": 1,
+    "requiredMods": [],
+    "songFilename": "",
+    "bpm": 100,
+    "volume": 100,
+    "offset": 0,
+    "pitch": 100,
+    "hitsound": "Kick",
+    "hitsoundVolume": 100,
+    "countdownTicks": 4,
+    "trackColorType": "Single",
+    "trackColor": "debb7b",
+    "secondaryTrackColor": "ffffff",
+    "trackColorAnimDuration": 2,
+    "trackColorPulse": "None",
+    "trackPulseLength": 10,
+    "trackStyle": "Standard",
+    "trackTexture": "",
+    "trackTextureScale": 1,
+    "trackGlowIntensity": 100,
+    "trackAnimation": "None",
+    "beatsAhead": 3,
+    "trackDisappearAnimation": "None",
+    "beatsBehind": 4,
+    "backgroundColor": "000000",
+    "showDefaultBGIfNoImage": True,
+    "showDefaultBGTile": False,
+    "defaultBGTileColor": "101121",
+    "defaultBGShapeType": "Default",
+    "defaultBGShapeColor": "ffffff",
+    "bgImage": "",
+    "bgImageColor": "ffffff",
+    "parallax": [100, 100],
+    "bgDisplayMode": "FitToScreen",
+    "imageSmoothing": True,
+    "lockRot": False,
+    "loopBG": False,
+    "scalingRatio": 100,
+    "relativeTo": "Player",
+    "position": [0, 0],
+    "rotation": 0,
+    "zoom": 100,
+    "pulseOnFloor": True,
+    "bgVideo": "",
+    "loopVideo": False,
+    "vidOffset": 0,
+    "floorIconOutlines": False,
+    "stickToFloors": True,
+    "planetEase": "Linear",
+    "planetEaseParts": 1,
+    "planetEasePartBehavior": "Mirror",
+    "defaultTextColor": "ffffff",
+    "defaultTextShadowColor": "00000050",
+    "congratsText": "",
+    "perfectText": "",
+    "legacyFlash": False,
+    "legacyCamRelativeTo": False,
+    "legacySpriteTiles": False,
+    "legacyTween": False,
+    "disableV15Features": False
+}
 
 def _docking(x, dock):  # 最近元素
     """docking helper"""
@@ -40,12 +119,19 @@ class ADOFAI:  # 为了方便操作文件搞了一个类
             self.actions = []
             self.decorations = []
 
+        self.completeSettings()
+
         # 方便后续操作
         self.floorAct = {}
         for i in range(len(self.angleData) + 1):
             self.floorAct[i] = []
         for x in self.actions:
             self.floorAct[x["floor"]].append(x)
+
+    def completeSettings(self):
+        for key in DEFAULT:
+            if not key in self.settings:
+                self.settings[key] = DEFAULT[key]
 
     def pathToAngle(self):  # 老板本的路径数据向新版本的角数据的转化
         """
@@ -154,6 +240,7 @@ class ADOFAI:  # 为了方便操作文件搞了一个类
                          "bpmMultiplier": speed_change, "angleOffset": 0})
                 angle.append(k * t * spd)
                 n += 1
+        self._floorActUpdate()
         return angle
 
     def angleToAngleData(self, passedAngle, offset, docking, twirlFilter=lambda n, x: False):
@@ -180,10 +267,13 @@ class ADOFAI:  # 为了方便操作文件搞了一个类
                     Twirl = -Twirl
                     self.actions.append({'floor': n, 'eventType': 'Twirl'})
                 angle = angle - x * Twirl + 180 + offset
-                self.angleData.append(angle % 360)
+                self.angleData.append(round(angle % 360, 4))
                 n += 1
             if x > 360:
                 print("[WARN] passedAngle = {} > 360, result may be error.".format(x))
+        self._floorActUpdate()
+
+    def _floorActUpdate(self):
         self.floorAct = {}
         for i in range(len(self.angleData) + 1):
             self.floorAct[i] = []
@@ -204,6 +294,7 @@ class ADOFAI:  # 为了方便操作文件搞了一个类
             elif self.actions[i]["floor"] in floor:
                 if self.actions[i]["eventType"] == eventType:
                     del self.actions[i]
+        self._floorActUpdate()
 
     def docking(self, docking):
         """
@@ -240,6 +331,7 @@ class ADOFAI:  # 为了方便操作文件搞了一个类
             y["floor"] += floor0
             self.actions.append(y)
         self.decorations = self.decorations + module.decorations
+        self._floorActUpdate()
 
     def save(self, path):
         """
