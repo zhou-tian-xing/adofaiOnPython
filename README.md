@@ -200,3 +200,4 @@ timelist = [1/1000 * x for x in range(1, 1001)]
 a.angleToAngleData(a.timeToAngle(timelist, 120), 0, False, lambda n, x: False)
 a.save("test.adofai")
 ```
+![image](https://github.com/user-attachments/assets/99bae2ea-eab8-49e0-821e-8d8567bc505c)
