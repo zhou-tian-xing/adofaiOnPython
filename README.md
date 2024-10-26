@@ -8,6 +8,8 @@
   - [例子 Examples](#例子Examples)
     - [1](#1)
     - [2](#2)
+    - [3](#3)
+    - [4](#4)
 
 **Warning: The Following Translations are Almost All Done by Machines, so I won't be Responsible for Them. (Well, my English is so poor that I may not able to write on my own......except this sentence.)**
 
