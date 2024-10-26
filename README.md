@@ -169,3 +169,20 @@ a.save("test.adofai")
 
 总之，只需要灵活的应用passedAngle, passedTime, timeToAngle, angleToAngleData四个方法就可以实现对旋转和加速Action的操作。
 In short, it is only necessary to flexibly apply the four methods of PassedAngle, PassedTime, timeToAngle, and angleToAngleData to achieve the operation of Twirl and SetSpeed actions.
+
+
+
+
+### 3
+
+以下代码实现220Hz、441Hz、659Hz声音的混合（注意不要出现整数倍，因为会重合，而音效播放是没有音量的）。
+The following code implements the mixing of 220Hz, 441Hz, and 659Hz sounds (be careful not to use integer multiples as they may overlap, and the sound effect playback has no volume).
+
+```python
+a = ADOFAI(None)
+timelist = [1/220 * x for x in range(441)] + [1/441 * x for x in range(883)] + [1/659 * x for x in range(1323)]
+timelist.sort()
+passtime = [timelist[i] - timelist[i - 1] for i in range(1, len(timelist))]
+a.angleToAngleData(a.timeToAngle(passtime, 1000), 0, False, lambda n, x: x < 31)
+a.save("test.adofai")
+```
