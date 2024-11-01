@@ -55,7 +55,7 @@ If you wish for me to add additional features, you can open an Issue, but I may 
 
 ## 使用指南-UsageGuide
 
-未来计划整个项目将封装到两个文件，分别是操作`.adofai`文件的`adofai.py`和进行自动采音的`collect.py`（暂定），以下分这两个部分进行描述。
+未来计划整个项目将封装到两个文件，分别是操作`.adofai`文件的`adofai.py`和进行自动采音的`sampling.py`，以下分这两个部分进行描述。
 The future plan is to encapsulate the entire project into two files, namely 'adofai.py' for manipulating the '.adofai' file and 'collect.py' for automatic sound harvesting (tentative). The following will describe these two parts.
 
 ### adofai.py
