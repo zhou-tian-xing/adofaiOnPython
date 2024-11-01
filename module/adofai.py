@@ -348,17 +348,23 @@ class ADOFAI:  # 为了方便操作文件搞了一个类
         Synthesize score into .wav files
         :param beatAudioPath: path of beat-sound (.wav file)
         :param outputPath: path of output file
+        :return: None
         """
         import scipy.io.wavfile as wavfile
         import numpy as np
         freq, beat = wavfile.read(beatAudioPath)
+        try:
+            song = wavfile.read(self.settings["songFilename"])
+        except:
+            song = np.array([0])
         beat = beat.astype(np.float32) / np.max(beat)  # 归一 + 转换数据类型
         t = self.passedTime()  # 间隔时间列表
 
+        n = max(round(beat.shape[0] + sum(t) * freq), song.shape[0])
         if len(beat.shape) == 1:
-            out = np.zeros((round(beat.shape[0] + sum(t) * freq),), dtype=np.float32) + 1
+            out = np.zeros((n,), dtype=np.float32) + 1
         else:
-            out = np.zeros((round(beat.shape[0] + sum(t) * freq), beat.shape[1]), dtype=np.float32) + 1
+            out = np.zeros((n, beat.shape[1]), dtype=np.float32) + 1
 
         T = [0]  # 累计时间的样本位置
         a = 0
