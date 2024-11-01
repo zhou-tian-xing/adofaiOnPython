@@ -80,6 +80,7 @@ DEFAULT = {
     "disableV15Features": False
 }
 
+
 def _docking(x, dock):  # 最近元素
     """docking helper"""
     m = x % 90
@@ -133,7 +134,7 @@ class ADOFAI:  # 为了方便操作文件搞了一个类
             if not key in self.settings:
                 self.settings[key] = DEFAULT[key]
 
-    def pathToAngle(self):  # 老板本的路径数据向新版本的角数据的转化
+    def pathToAngle(self):  # 老版本的路径数据向新版本的角数据的转化
         """
         Turn self.pathData to self.angleData
         :return: None
@@ -164,7 +165,7 @@ class ADOFAI:  # 为了方便操作文件搞了一个类
         total = len(self.angleData)  # 要打的块的数量=描述的方向的数量
         out = []
         i = 1
-        D = True  # 方向，是逆时针还是顺时针
+        D = False if {'floor': 0, 'eventType': 'Twirl'} in self.actions else 1  # 方向，是逆时针还是顺时针
         while i < total:
             if self.angleData[i] != 999:
                 a = self.angleData[i - 1] - self.angleData[i] + 180
@@ -192,7 +193,7 @@ class ADOFAI:  # 为了方便操作文件搞了一个类
         total = len(self.angleData)  # 要打的块的数量=描述的方向的数量
         out = []
         i = 1
-        D = True  # 方向，是逆时针还是顺时针
+        D = False if {'floor': 0, 'eventType': 'Twirl'} in self.actions else 1  # 方向，是逆时针还是顺时针
         while i < total:
             # 由于指示的是方向，所以大于360和小于0的角都毫无意义。
             if self.angleData[i] != 999:
@@ -263,7 +264,7 @@ class ADOFAI:  # 为了方便操作文件搞了一个类
         n = 0
         for x in passedAngle:
             if x:
-                if twirlFilter(n, x):
+                if twirlFilter(n, x) and n > 0:
                     Twirl = -Twirl
                     self.actions.append({'floor': n, 'eventType': 'Twirl'})
                 angle = angle - x * Twirl + 180 + offset
@@ -341,3 +342,34 @@ class ADOFAI:  # 为了方便操作文件搞了一个类
         with open(path, 'w') as f:
             json.dump({"angleData": self.angleData, "settings": self.settings, "actions": self.actions,
                        "decorations": self.decorations}, f)
+
+    def make(self, beatAudioPath, outputPath):
+        """
+        Synthesize score into .wav files
+        :param beatAudioPath: path of beat-sound (.wav file)
+        :param outputPath: path of output file
+        """
+        import scipy.io.wavfile as wavfile
+        import numpy as np
+        freq, beat = wavfile.read(beatAudioPath)
+        beat = beat.astype(np.float32) / np.max(beat)  # 归一 + 转换数据类型
+        t = self.passedTime()  # 间隔时间列表
+
+        if len(beat.shape) == 1:
+            out = np.zeros((round(beat.shape[0] + sum(t) * freq),), dtype=np.float32) + 1
+        else:
+            out = np.zeros((round(beat.shape[0] + sum(t) * freq), beat.shape[1]), dtype=np.float32) + 1
+
+        T = [0]  # 累计时间的样本位置
+        a = 0
+        for i in t:
+            a += i
+            T.append(round(a * freq))
+
+        # 把对应位置的打击声音加到out上面
+        for j in T:
+            out[j: j + beat.shape[0]] += beat
+
+        out /= np.max(out)  # 归一化
+        out -= np.average(out)
+        wavfile.write(outputPath, freq, out)  # 写入文件
