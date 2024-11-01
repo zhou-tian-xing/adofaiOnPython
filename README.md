@@ -46,8 +46,10 @@ If you wish for me to add additional features, you can open an Issue, but I may 
 + [x] 在不改变实际打的谱子的情况下去除倍速。    Remove the speed multiplier without altering the actual chart.
 + [x] 在不改变实际打的谱子的情况下去除旋转。    Remove rotations without altering the actual chart.
 + [ ] 播放器（实际上我认为没什么必要，因为用官方的编辑器可以很方便的重新打开一个文件（只需要两次点击！））    Player (actually, I don't think it's very necessary because the official editor can easily reopen a file with just two clicks!)
++ [x] 输出音频    Output audio
 + [ ] 歌的延迟分析和bpm分析（纯属多此一举，绝对不是因为我写不明白）    Delay analysis and BPM analysis of a song (totally unnecessary, definitely not because I can't figure out how to write it)
 + [x] 输出每次打击的时间   Output the time of each hit
++ [ ] `.midi`文件转化为乐谱   Convert `.midi` files to sheet music
 
 
 
@@ -130,6 +132,13 @@ class ADOFAI:
         :param speedFilter: A method(f(n, x)) deciding which blocks will be given action of "SetSpeed", n is the floor of the block, and x is the angle(may be docked).
                             If the return is 1, the block will not be given action of "SetSpeed", other will use "bpmMultiplier" = result. (x is the passed angle that takes into account changes in speed)
         :return: [passed angle]
+        """
+    def make(self, beatAudioPath, outputPath):
+        """
+        Synthesize score into .wav files
+        :param beatAudioPath: path of beat-sound (.wav file)
+        :param outputPath: path of output file
+        :return: None
         """
 
 def _docking(x, dock):
